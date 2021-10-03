@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.composesample.model.Movie
 
@@ -21,7 +22,7 @@ fun Movies(
     navController: NavController
 ) {
 
-    val viewModel : MoviesViewModel by viewModel()
+    val viewModel : MoviesViewModel = hiltViewModel()
 
     val viewState by viewModel.state.collectAsState()
 
