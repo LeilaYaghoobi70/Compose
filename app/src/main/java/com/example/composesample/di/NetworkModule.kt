@@ -11,16 +11,21 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 class NetworkModule {
 
+    @Named("HeaderLoggingInterceptor")
     @Provides
     @Singleton
-    fun provideHttpLoggingInterceptor(): Interceptor = HttpLoggingInterceptor()
+    fun provideHttpLoggingInterceptor(): Interceptor = HttpLoggingInterceptor().apply {
+        setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
 
+    @Named("HeaderInterceptor")
     @Provides
     @Singleton
     fun provideHeaderInterceptor(): Interceptor = Interceptor { chain ->
@@ -29,8 +34,7 @@ class NetworkModule {
                 "x-rapidapi-key",
                 BuildConfig.API_KEY
             ).addHeader(
-                "x-rapidapi-host",
-                "unogsng.p.rapidapi.com"
+                "content-type", "application/json"
             )
             .build()
         chain.proceed(request)
@@ -39,8 +43,10 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
+        @Named("HeaderInterceptor")
         headerInterceptor: Interceptor,
-        httpLoggingInterceptor: HttpLoggingInterceptor
+        @Named("HeaderLoggingInterceptor")
+        httpLoggingInterceptor: Interceptor
     ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(headerInterceptor)

@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.composesample.ui.movies.Movies
+import com.example.composesample.ui.movies.CountryView
 import com.example.composesample.ui.theme.ComposeSampleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,8 +33,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun SettingNavController() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "movies") {
-        composable("movies") { Movies(navController = navController) }
+    NavHost(navController = navController, startDestination = "CountryView") {
+        composable("CountryView") { CountryView(navController = navController) }
         /*...*/
     }
 }

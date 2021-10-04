@@ -15,15 +15,16 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.composesample.data.model.Movie
+import com.example.composesample.data.model.remote.Film
+import com.example.composesample.data.model.remote.Filmography
 
 
 @Composable
-fun Movies(
+fun CountryView(
     navController: NavController
 ) {
 
-    val viewModel: MoviesViewModel = hiltViewModel()
+    val viewModel: CountryViewModel = hiltViewModel()
 
     val viewState by viewModel.state.collectAsState()
 
@@ -44,17 +45,17 @@ fun Movies(
 @Composable
 fun HomeContent(
     modifier: Modifier,
-    movies: List<Movie>?,
+    film:Film?,
     isLoading: Boolean?,
     throwable: Throwable?,
-    selectMovie: ((Movie) -> Unit)
+    selectCountry: ((Filmography) -> Unit)
 ) {
 
     Column(modifier = modifier) {
-        if (movies?.isNotEmpty() == true) {
-            CreateMovieList(
-                categories = movies,
-                selectMovie = selectMovie,
+        if (film != null) {
+            CreateCountryList(
+                films = film,
+                selectActor = selectCountry,
             )
         }
 
@@ -63,12 +64,14 @@ fun HomeContent(
 }
 
 @Composable
-fun CreateMovieList(categories: List<Movie>, selectMovie: ((Movie) -> Unit)) {
-    ConstraintLayout(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight()) {
+fun CreateCountryList(films: Film, selectActor: ((Filmography) -> Unit)) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+    ) {
         val (button, Row) = createRefs()
-        categories.forEach { movie ->
+        films.filmography.forEach { filmography ->
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.Cyan)
@@ -77,12 +80,12 @@ fun CreateMovieList(categories: List<Movie>, selectMovie: ((Movie) -> Unit)) {
                     end.linkTo(parent.end, margin = 12.dp)
                     start.linkTo(parent.start, margin = 12.dp)
                 }) {
-                Text(text = movie.name,
+                Text(text = filmography.title,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp, top = 12.dp)
                         .clickable {
-                            selectMovie.invoke(movie)
+                            selectActor.invoke(filmography)
                         }
                 )
             }
