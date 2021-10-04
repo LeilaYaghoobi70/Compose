@@ -3,7 +3,9 @@ package com.example.composesample.ui.movies
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +47,7 @@ fun CountryView(
 @Composable
 fun HomeContent(
     modifier: Modifier,
-    film:Film?,
+    film: Film?,
     isLoading: Boolean?,
     throwable: Throwable?,
     selectCountry: ((Filmography) -> Unit)
@@ -56,6 +58,7 @@ fun HomeContent(
             CreateCountryList(
                 films = film,
                 selectActor = selectCountry,
+                isLoading = isLoading
             )
         }
 
@@ -64,16 +67,21 @@ fun HomeContent(
 }
 
 @Composable
-fun CreateCountryList(films: Film, selectActor: ((Filmography) -> Unit)) {
+fun CreateCountryList(
+    isLoading: Boolean?,
+    films: Film,
+    selectActor: ((Filmography) -> Unit)
+) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        val (button, Row) = createRefs()
+        val (button, Row, circularProgress) = createRefs()
         films.filmography.forEach { filmography ->
             Row(modifier = Modifier
                 .fillMaxWidth()
+                .height(48.dp)
                 .background(Color.Cyan)
                 .constrainAs(Row) {
                     top.linkTo(parent.top, margin = 12.dp)
@@ -91,6 +99,19 @@ fun CreateCountryList(films: Film, selectActor: ((Filmography) -> Unit)) {
             }
 
         }
+
+        if (isLoading == true)
+            CircularProgressIndicator(
+                progress = 0.5f,
+                modifier = Modifier
+                    .constrainAs(circularProgress) {
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                    }
+                    .background(Color.Green)
+            )
 
         Button(
             onClick = { /*TODO*/ },

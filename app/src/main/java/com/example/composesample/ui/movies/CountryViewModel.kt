@@ -18,7 +18,7 @@ class CountryViewModel @Inject constructor(
     private val mCountryRepository: CountryRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(Country())
+    private val _state = MutableStateFlow(Country(Loading = true))
     val state: StateFlow<Country> = _state
 
     init {
