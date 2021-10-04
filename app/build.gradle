@@ -25,8 +25,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", 'BASE_URL', '"https://unogsng.p.rapidapi.com/"'
+            buildConfigField "String", "API_KEY", API_KEY
+        }
+
+        debug {
+            buildConfigField "String", 'BASE_URL', '"https://unogsng.p.rapidapi.com/"'
+            buildConfigField "String", "API_KEY", API_KEY
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -66,7 +74,16 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
+    //---------retrofit
+    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.2'
 
+    //---------constraint compose
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
+
+    //---------viewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
 

@@ -1,7 +1,7 @@
 package com.example.composesample.di
 
-import com.example.composesample.repository.MovieRepository
-import com.example.composesample.repository.MovieRepositoryImp
+import com.example.composesample.data.repository.MovieRepository
+import com.example.composesample.data.repository.MovieRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,6 +1,6 @@
-package com.example.composesample.repository
+package com.example.composesample.data.repository
 
-import com.example.composesample.model.Movie
+import com.example.composesample.data.model.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

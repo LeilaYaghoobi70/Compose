@@ -1,4 +1,4 @@
-package com.example.composesample.model
+package com.example.composesample.data.model
 
 
 data class Movie(

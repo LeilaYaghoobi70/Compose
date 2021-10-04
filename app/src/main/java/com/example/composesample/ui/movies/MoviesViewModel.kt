@@ -2,8 +2,8 @@ package com.example.composesample.ui.movies
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composesample.model.Movie
-import com.example.composesample.repository.MovieRepository
+import com.example.composesample.data.model.Movie
+import com.example.composesample.data.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
