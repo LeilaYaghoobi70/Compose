@@ -5,10 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,20 +27,21 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.example.composesample.DetailMovie
+import com.example.composesample.ID
 import com.example.composesample.R
 import com.example.composesample.data.model.remote.Base
-import com.example.composesample.data.model.remote.Film
-import com.example.composesample.data.model.remote.Filmography
 import com.example.composesample.data.model.remote.ImageActor
-import kotlin.math.round
+import com.example.composesample.data.model.remote.Movie
+import com.example.composesample.data.model.remote.Movieography
 
 
 @Composable
-fun CountryView(
+fun MovieView(
     navController: NavController
 ) {
 
-    val viewModel: CountryViewModel = hiltViewModel()
+    val viewModel: MovieViewModel = hiltViewModel()
     val viewState by viewModel.state.collectAsState()
 
     Surface(
@@ -53,8 +54,8 @@ fun CountryView(
             viewState.successful,
             viewState.Loading,
             viewState.throwable
-        ) {
-
+        ) { movieGraphy ->
+            navController.navigate("$DetailMovie/${movieGraphy.id}")
         }
     }
 
@@ -64,14 +65,14 @@ fun CountryView(
 @Composable
 fun HomeContent(
     modifier: Modifier,
-    film: Film?,
+    Movie: Movie?,
     isLoading: Boolean?,
     throwable: Throwable?,
-    selectCountry: ((Filmography) -> Unit)
+    selectCountry: ((Movieography) -> Unit)
 ) {
-    if (film != null) {
+    if (Movie != null) {
         CreateCountryList(
-            films = film,
+            Movies = Movie,
             selectActor = selectCountry,
             isLoading = isLoading
         )
@@ -83,8 +84,8 @@ fun HomeContent(
 @Composable
 fun CreateCountryList(
     isLoading: Boolean?,
-    films: Film,
-    selectActor: ((Filmography) -> Unit)
+    Movies: Movie,
+    selectActor: ((Movieography) -> Unit)
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -93,7 +94,7 @@ fun CreateCountryList(
             .background(colorResource(R.color.background))
     ) {
         val (titleText, circularProgress, imageViewActor, descriptionText) = createRefs()
-        FilmList(films, titleText, imageViewActor, descriptionText)
+        MovieList(Movies, titleText, imageViewActor, descriptionText, selectActor)
         if (isLoading == true)
             CircularProgressIndicator(
                 progress = 0.5f,
@@ -112,23 +113,27 @@ fun CreateCountryList(
 }
 
 @Composable
-private fun FilmList(
-    films: Film,
+private fun MovieList(
+    Movies: Movie,
     titleText: ConstrainedLayoutReference,
     imageViewActor: ConstrainedLayoutReference,
     descriptionText: ConstrainedLayoutReference,
+    selectActor: ((Movieography) -> Unit)
 ) {
     LazyColumn(
         Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         contentPadding = PaddingValues(vertical = 16.dp),
     ) {
-        films.filmography.forEach { filmography ->
+        Movies.movieoGraphy.forEach { Movieography ->
             item {
                 ConstraintLayout(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(80.dp)
+                        .clickable {
+                            selectActor.invoke(Movieography)
+                        }
 
                 ) {
                     Text(
@@ -138,7 +143,7 @@ private fun FilmList(
                                 top.linkTo(imageViewActor.top)
                                 end.linkTo(parent.end)
                             },
-                        text = filmography.title,
+                        text = Movieography.title,
                         color = colorResource(id = R.color.textColorTitle),
                         fontSize = 12.sp
                     )
@@ -151,20 +156,20 @@ private fun FilmList(
                                 end.linkTo(parent.end)
                             },
                         text = stringResource(id = R.string.category) +
-                                filmography.category +
+                                Movieography.category +
                                 stringResource(id = R.string.space) +
                                 stringResource(id = R.string.title) +
-                                filmography.titleType +
+                                Movieography.titleType +
                                 stringResource(id = R.string.space) +
                                 stringResource(id = R.string.status) +
-                                filmography.status,
+                                Movieography.status,
 
                         color = colorResource(id = R.color.textColorDescription),
                         fontSize = 10.sp
                     )
 
 
-                    filmography.image?.let { rememberImagePainter(data = it.url) }?.let {
+                    Movieography.image?.let { rememberImagePainter(data = it.url) }?.let {
                         Image(
                             painter = it,
                             contentDescription = "Forest Image",
@@ -180,6 +185,7 @@ private fun FilmList(
                             contentScale = ContentScale.Crop
                         )
                     }
+
                 }
                 Divider(
                     color = colorResource(id = R.color.dividerColor),
@@ -199,7 +205,7 @@ private fun FilmList(
 fun CountryPreview() {
     CreateCountryList(
         true,
-        Film(
+        Movie(
             "1",
             Base("", "", "", arrayListOf(), ImageActor("", 0, 0, "")), listOf()
         )

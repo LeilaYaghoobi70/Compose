@@ -1,7 +1,10 @@
 package com.example.composesample.data.model.remote
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Base(
     @SerializedName("id")
     val id: String,
@@ -13,4 +16,4 @@ data class Base(
     val akas: List<String>,
     @SerializedName("image")
     val image:ImageActor?
-)
+):Parcelable

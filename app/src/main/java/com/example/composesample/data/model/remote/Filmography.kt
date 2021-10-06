@@ -1,8 +1,11 @@
 package com.example.composesample.data.model.remote
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
-data class Filmography(
+@Parcelize
+data class Movieography(
     @SerializedName("category")
     val category: String,
     @SerializedName("id")
@@ -15,4 +18,4 @@ data class Filmography(
     val title: String,
     @SerializedName("titleType")
     val titleType: String,
-)
+) : Parcelable

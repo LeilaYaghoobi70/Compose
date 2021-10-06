@@ -2,7 +2,7 @@ package com.example.composesample.ui.movies
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composesample.data.model.remote.Film
+import com.example.composesample.data.model.remote.Movie
 import com.example.composesample.data.repository.CountryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CountryViewModel @Inject constructor(
+class MovieViewModel @Inject constructor(
     private val mCountryRepository: CountryRepository
 ) : ViewModel() {
 
@@ -38,5 +38,5 @@ class CountryViewModel @Inject constructor(
 data class Country(
     val Loading: Boolean? = false,
     val throwable: Throwable? = null,
-    val successful: Film? = null
+    val successful: Movie? = null
 )
