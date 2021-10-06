@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class ImageActor(
     @SerializedName("id")
-    val id: String,
+    val id: String?,
     @SerializedName("height")
-    val height: Int,
+    val height: Int?,
     @SerializedName("width")
-    val width: Int,
+    val width: Int?,
     @SerializedName("url")
-    val url: String,
+    val url: String?,
     )

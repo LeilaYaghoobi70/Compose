@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ComposeSample</string>
+
+    <string name="title">Title:\u0020</string>
+    <string name="status">Status:\u0020</string>
+    <string name="category">Category:\u0020</string>
+    <string name="space">\u0020\u0020</string>
+
 </resources>

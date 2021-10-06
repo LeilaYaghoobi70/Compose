@@ -8,7 +8,7 @@ data class Filmography(
     @SerializedName("id")
     val id: String,
     @SerializedName("image")
-    val image: ImageActor,
+    val image: ImageActor?,
     @SerializedName("status")
     val status: String,
     @SerializedName("title")
