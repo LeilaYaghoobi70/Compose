@@ -3,7 +3,12 @@
 
     <string name="title">Title:\u0020</string>
     <string name="status">Status:\u0020</string>
-    <string name="category">Category:\u0020</string>
+
     <string name="space">\u0020\u0020</string>
+
+    <string name="category">Category:\u0020</string>
+    <string name="startYear">Start Year:\u0020</string>
+    <string name="endYear">End Year:\u0020</string>
+
 
 </resources>

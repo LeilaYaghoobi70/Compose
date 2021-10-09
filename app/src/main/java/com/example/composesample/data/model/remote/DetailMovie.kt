@@ -14,8 +14,6 @@ data class DetailMovie(
     val mEndYear: Int?,
     @SerializedName("episodeCount")
     val mEpisodeCount: Int?,
-    @SerializedName("roles")
-    val mRoles: List<String>?,
     @SerializedName("startYear")
     val mStartYear: Int?,
     @SerializedName("id")
@@ -29,5 +27,5 @@ data class DetailMovie(
     @SerializedName("titleType")
     val mTitleType: String,
     @SerializedName("image")
-    val mImage: List<Image>?
+    val mImage: ImageActor?
 )

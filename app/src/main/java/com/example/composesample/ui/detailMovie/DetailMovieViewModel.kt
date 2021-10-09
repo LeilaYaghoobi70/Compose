@@ -20,18 +20,18 @@ class DetailMovieViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(DetailMovieStatus())
+    private val _state = MutableStateFlow<DetailMovieStatus>(DetailMovieStatus.None)
     val state: StateFlow<DetailMovieStatus> = _state
 
     fun getMovieDetail(id: String, category: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _state.value = DetailMovieStatus(Loading = true)
+            _state.value = DetailMovieStatus.Loading
             movieRepository.getFilmographyAppearances(
                 id = id, category = category, region = region
-            ).catch {
-                _state.value = DetailMovieStatus(throwable = it)
+            ).catch { throwable ->
+                _state.value = DetailMovieStatus.Throwable(throwable)
             }.collect {
-                _state.value = DetailMovieStatus(successful = it)
+                _state.value = DetailMovieStatus.Successful(successful = it)
             }
         }
 
@@ -40,8 +40,10 @@ class DetailMovieViewModel @Inject constructor(
 
 }
 
-data class DetailMovieStatus(
-    val Loading: Boolean? = false,
-    val throwable: Throwable? = null,
-    val successful: List<DetailMovie>? = null
-)
+sealed class DetailMovieStatus() {
+    object None : DetailMovieStatus()
+    object Loading : DetailMovieStatus()
+    data class Throwable(val throwable: kotlin.Throwable?) : DetailMovieStatus()
+    data class Successful(val successful: List<DetailMovie>?) : DetailMovieStatus()
+}
+
