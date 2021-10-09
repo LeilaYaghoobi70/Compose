@@ -1,5 +1,6 @@
 package com.example.composesample.ui.movies
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,13 +14,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
@@ -27,18 +28,16 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.example.composesample.DetailMovie
-import com.example.composesample.ID
 import com.example.composesample.R
-import com.example.composesample.data.model.remote.Base
-import com.example.composesample.data.model.remote.ImageActor
 import com.example.composesample.data.model.remote.Movie
 import com.example.composesample.data.model.remote.Movieography
+import com.example.composesample.utils.DetailMovie
 
 
 @Composable
 fun MovieView(
-    navController: NavController
+    navController: NavController,
+    modifier: Modifier
 ) {
 
     val viewModel: MovieViewModel = hiltViewModel()
@@ -50,12 +49,20 @@ fun MovieView(
             .background(colorResource(R.color.background))
     ) {
         HomeContent(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier,
             viewState.successful,
             viewState.Loading,
             viewState.throwable
         ) { movieGraphy ->
-            navController.navigate("$DetailMovie/${movieGraphy.id}")
+            navController.navigate(
+                DetailMovie.plus(
+                    "/${
+                        movieGraphy.id
+                            .replace("/title/", "")
+                            .replace("/", "")
+                    }/${movieGraphy.category}"
+                )
+            )
         }
     }
 
@@ -70,12 +77,26 @@ fun HomeContent(
     throwable: Throwable?,
     selectCountry: ((Movieography) -> Unit)
 ) {
-    if (Movie != null) {
-        CreateCountryList(
-            Movies = Movie,
-            selectActor = selectCountry,
-            isLoading = isLoading
-        )
+    Box(modifier = modifier) {
+        if (Movie != null) {
+            CreateCountryList(
+                Movies = Movie,
+                selectActor = selectCountry,
+            )
+        }
+
+        if (isLoading == true)
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+
+        throwable?.let {
+            Toast.makeText(
+                LocalContext.current,
+                it.message,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+
     }
 
 
@@ -83,7 +104,6 @@ fun HomeContent(
 
 @Composable
 fun CreateCountryList(
-    isLoading: Boolean?,
     Movies: Movie,
     selectActor: ((Movieography) -> Unit)
 ) {
@@ -95,18 +115,7 @@ fun CreateCountryList(
     ) {
         val (titleText, circularProgress, imageViewActor, descriptionText) = createRefs()
         MovieList(Movies, titleText, imageViewActor, descriptionText, selectActor)
-        if (isLoading == true)
-            CircularProgressIndicator(
-                progress = 0.5f,
-                modifier = Modifier
-                    .constrainAs(circularProgress) {
-                        bottom.linkTo(parent.bottom)
-                        end.linkTo(parent.end)
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                    }
-                    .background(Color.Green)
-            )
+
     }
 
 
@@ -200,14 +209,3 @@ private fun MovieList(
     }
 }
 
-@Preview
-@Composable
-fun CountryPreview() {
-    CreateCountryList(
-        true,
-        Movie(
-            "1",
-            Base("", "", "", arrayListOf(), ImageActor("", 0, 0, "")), listOf()
-        )
-    ) {}
-}

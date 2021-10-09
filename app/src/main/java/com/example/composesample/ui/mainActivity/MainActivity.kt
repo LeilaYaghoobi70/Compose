@@ -1,4 +1,4 @@
-package com.example.composesample
+package com.example.composesample.ui.mainActivity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import com.example.composesample.ui.theme.ComposeSampleTheme
+import com.example.composesample.utils.SettingNavController
 import dagger.hilt.android.AndroidEntryPoint
 
 

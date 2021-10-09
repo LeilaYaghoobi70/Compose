@@ -3,7 +3,7 @@ package com.example.composesample.ui.movies
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composesample.data.model.remote.Movie
-import com.example.composesample.data.repository.CountryRepository
+import com.example.composesample.data.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(
-    private val mCountryRepository: CountryRepository
+    private val mCountryRepository: MovieRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(Country(Loading = true))
@@ -24,7 +24,7 @@ class MovieViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             _state.value = Country(Loading = true)
-            mCountryRepository.getCountry()
+            mCountryRepository.getFilmography()
                 .catch { throwable ->
                     _state.value = Country(throwable = throwable)
                 }.collect {
